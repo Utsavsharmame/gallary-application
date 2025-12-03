@@ -1,73 +1,44 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import Card from "./components/Card";
-
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import Home from "./pages/Home";
+import Navbar from "./components/Navbar";
+import Product from "./pages/Product";
+import NotFound from "./pages/NotFound";
+import Women from "./pages/Women";
+import Men from "./pages/Men";
+import kids from "./pages/kids";
 const App = () => {
-  const [userData, setUserData] = useState([]);
-
-  const [index, setIndex] = useState(1);
-
-  const getData = async () => {
-    const response = await axios.get(
-      `https://picsum.photos/v2/list?page=${index}&limit=10`
-    );
-    setUserData(response.data);
-  };
-
-  useEffect(
-    function () {
-      getData();
-    },
-    [index]
-  );
-
-  let printUserData = (
-    <h3 className="text-gray-300 text-xs absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-semibold">
-      Loading...
-    </h3>
-  );
-
-  if (userData.length > 0) {
-    printUserData = userData.map(function (elem, idx) {
-      return (
-        <div key={idx}>
-          <Card elem={elem} />
-        </div>
-      );
-    });
-  }
-
   return (
-    <div className="bg-black overflow-auto h-screen p-4 text-white">
-      <div className="flex h-[82%] flex-wrap gap-4 p-2">{printUserData}</div>
-
-      <div className="flex justify-center gap-6 items-center p-4">
-        <button
-          style={{ opacity: index == 1 ? 0.6 : 1 }}
-          className="bg-amber-400 text-sm cursor-pointer active:scale-95 text-black rounded px-4 py-2 font-semibold"
-          onClick={() => {
-            if (index > 1) {
-              setIndex(index - 1);
-              setUserData([]);
-            }
-          }}
-        >
-          Prev
-        </button>
-        <h4>Page {index}</h4>
-        <button
-          className="bg-amber-400 text-sm cursor-pointer active:scale-95 text-black rounded px-4 py-2 font-semibold"
-          onClick={() => {
-            setUserData([]);
-
-            setIndex(index + 1);
-          }}
-        >
-          Next
-        </button>
-      </div>
+    <div className="flex flex-col text-center h-screen bg-black text-white">
+      <Navbar />
+      <main className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/About" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/product" element={<Product />} >
+          
+          <Route path="men" element={<Men />} />
+      
+       <Route path="women" element={<Women />} />
+       <Route path="kids" element={<kids/>}/>
+           </Route>
+      
+        <Route path='*' element={ <NotFound/>} />
+        
+       
+       
+        </Routes>
+      </main>
+     
+      <footer className="py-4 text-sm border-t border-white/10">
+        © {new Date().getFullYear()} My App
+      </footer>
     </div>
   );
 };
 
 export default App;
+
